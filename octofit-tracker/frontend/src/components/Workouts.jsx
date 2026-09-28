@@ -1,8 +1,13 @@
 import { useCollection } from '../api.js'
 import CollectionPage from './CollectionPage.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const workoutsEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/workouts/`
+  : 'http://localhost:8000/api/workouts/'
+
 function Workouts() {
-  const workouts = useCollection('workouts')
+  const workouts = useCollection('workouts', workoutsEndpoint)
 
   return (
     <CollectionPage

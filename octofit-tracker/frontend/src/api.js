@@ -7,8 +7,8 @@ const apiOrigin = codespaceName
 
 export const API_BASE_URL = `${apiOrigin}/api`
 
-export async function fetchCollection(resource, signal) {
-  const response = await fetch(`${API_BASE_URL}/${resource}/`, { signal })
+export async function fetchCollection(resource, signal, endpoint = `${API_BASE_URL}/${resource}/`) {
+  const response = await fetch(endpoint, { signal })
 
   if (!response.ok) {
     throw new Error(`Could not load ${resource} (${response.status})`)
@@ -26,13 +26,13 @@ export async function fetchCollection(resource, signal) {
   return candidates.find(Array.isArray) ?? []
 }
 
-export function useCollection(resource) {
+export function useCollection(resource, endpoint) {
   const [state, setState] = useState({ data: [], loading: true, error: '' })
 
   useEffect(() => {
     const controller = new AbortController()
 
-    fetchCollection(resource, controller.signal)
+    fetchCollection(resource, controller.signal, endpoint)
       .then((data) => setState({ data, loading: false, error: '' }))
       .catch((error) => {
         if (error.name !== 'AbortError') {
@@ -41,7 +41,7 @@ export function useCollection(resource) {
       })
 
     return () => controller.abort()
-  }, [resource])
+  }, [resource, endpoint])
 
   return state
 }

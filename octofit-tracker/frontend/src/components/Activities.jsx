@@ -1,8 +1,13 @@
 import { formatDate, referenceLabel, useCollection } from '../api.js'
 import CollectionPage from './CollectionPage.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const activitiesEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
+
 function Activities() {
-  const activities = useCollection('activities')
+  const activities = useCollection('activities', activitiesEndpoint)
   const users = useCollection('users')
   const teams = useCollection('teams')
 

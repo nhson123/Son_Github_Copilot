@@ -1,8 +1,13 @@
 import { referenceLabel, useCollection } from '../api.js'
 import CollectionPage from './CollectionPage.jsx'
 
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const leaderboardEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`
+  : 'http://localhost:8000/api/leaderboard/'
+
 function Leaderboard() {
-  const leaderboard = useCollection('leaderboard')
+  const leaderboard = useCollection('leaderboard', leaderboardEndpoint)
   const users = useCollection('users')
   const teams = useCollection('teams')
 
